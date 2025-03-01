@@ -1,13 +1,4 @@
-#pip install -q -U google-genai
 #pip install google-generativeai
-
-#from google import genai
-
-#client = genai.Client(api_key="AIzaSyBLi3xUnco4sZsuoi0oPRLzDo0SKTNMPu8")
-#response = client.models.generate_content(
-#    model="gemini-2.0-flash", contents="Evaluating a resume"
-#)
-#print(response.text)
 
 import re
 import google.generativeai as genai
