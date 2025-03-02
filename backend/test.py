@@ -75,7 +75,7 @@ def extract_education(text):
     education = []    
 
     # Use regex pattern to find education information
-    pattern = r"(?i)(?:(?:Bachelor|B\.S\.|B\.A\.|Master|M\.S\.|M\.A\.|Ph\.D\.)\s(?:[A-Za-z]+\s)*[A-Za-z]+)"
+    pattern = r"(?i)(?:(?:Associates|Bachelor|B\.S\.|B\.A\.|Master|M\.S\.|M\.A\.|Ph\.D\.)\s(?:[A-Za-z]+\s)*[A-Za-z]+)"
     matches = re.findall(pattern, text)
     for match in matches:
         education.append(match.strip())
@@ -179,3 +179,5 @@ for l in extract_education(resume_text):
 
 
 resume_description = f"{name}, {email}, {phone}, {linkedin}, \nInstitutions: {institutions} \nEducation:{education} \nRelated Classes: {classes} \nSkills: {skills} \nExperience: {experience}"
+
+print(resume_description)
