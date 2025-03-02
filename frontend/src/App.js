@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom"; 
 import axios from "axios";
 import "./App.css";
-import Navbar from "./Navbar.js"; // Import the new Navbar component
+import Navbar from "./Navbar.js";
 import Leaderboard from "./Leaderboard";
 import CandidateAnalysis from "./CandidateAnalysis"; 
 import CandidateSummary from "./CandidateSummary";

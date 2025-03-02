@@ -26,7 +26,7 @@ ALLOWED_EXTENSIONS = {"pdf"}
 
 genai.configure(api_key="AIzaSyBLi3xUnco4sZsuoi0oPRLzDo0SKTNMPu8")
 
-uri = "mongodb+srv://zack:9tzmM5v70eQUQd6W@cluster0.4inxm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+uri = "mongodb+srv://zack:6btrlkKrcYD8IfSO@cluster0.4inxm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 client = MongoClient(uri, server_api=ServerApi('1'))
 
 try:
@@ -287,10 +287,23 @@ def serve_pdf(filename):
 
 @app.route("/api/jobs", methods=["GET"])
 def get_jobs():
-    """Fetch all unique job IDs."""
+    """Fetch all unique job IDs and names."""
     try:
-        job_ids = collection.distinct("job_id")
-        return jsonify({"job_ids": job_ids}), 200
+        # Find all unique jobs and their names
+        jobs = collection.aggregate([
+            {"$group": {
+                "_id": "$job_id",
+                "name": {"$first": "$job_name"}
+            }},
+            {"$project": {
+                "id": "$_id",
+                "name": 1,
+                "_id": 0
+            }}
+        ])
+        
+        job_list = list(jobs)
+        return jsonify({"jobs": job_list}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -299,19 +312,26 @@ def get_jobs():
 def get_leaderboard(job_id):
     """Fetch leaderboard data for a specific job ID."""
     try:
-        print(f"Fetching leaderboard data for job_id: {job_id}")  
+        print(f"Fetching leaderboard data for job_id: {job_id}")
+        # Also fetch the job name
+        job_info = collection.find_one({"job_id": job_id}, {"job_name": 1})
+        job_name = job_info.get("job_name") if job_info else f"Job {job_id}"
+        
         candidates = list(collection.find(
             {"job_id": job_id},
-            {"_id": 1, "resume_filename": 1, "score": 1, "candidate_name": 1}  
+            {"_id": 1, "resume_filename": 1, "score": 1, "candidate_name": 1}
         ).sort("score", -1))
 
         for candidate in candidates:
             candidate["_id"] = str(candidate["_id"])
 
-        print("Candidates:", candidates) 
-        return jsonify({"candidates": candidates}), 200
+        print("Candidates:", candidates)
+        return jsonify({
+            "candidates": candidates,
+            "job_name": job_name
+        }), 200
     except Exception as e:
-        print("Error fetching leaderboard data:", str(e)) 
+        print("Error fetching leaderboard data:", str(e))
         return jsonify({"error": str(e)}), 500
     
 @app.route("/api/candidate/<candidate_id>", methods=["GET"])

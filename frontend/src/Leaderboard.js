@@ -14,7 +14,8 @@ const Leaderboard = () => {
     setLoading(true);
     axios.get("http://localhost:5000/api/jobs")
       .then(response => {
-        setJobs(response.data.job_ids.map(id => ({ id, name: `Job ${id}` })));
+        // Use the actual job names from the API response
+        setJobs(response.data.jobs.map(job => ({ id: job.id, name: job.name })));
         setLoading(false);
       })
       .catch(error => {
@@ -22,7 +23,7 @@ const Leaderboard = () => {
         setLoading(false);
       });
   }, []);
-
+  
   // Fetch leaderboard data when a job ID is selected
   useEffect(() => {
     if (selectedJobId) {
@@ -30,6 +31,13 @@ const Leaderboard = () => {
       axios.get(`http://localhost:5000/api/leaderboard/${selectedJobId}`)
         .then(response => {
           setLeaderboardData(response.data.candidates);
+          // If you want to update the job name from the response:
+          // const jobIndex = jobs.findIndex(job => job.id === selectedJobId);
+          // if (jobIndex !== -1) {
+          //   const updatedJobs = [...jobs];
+          //   updatedJobs[jobIndex].name = response.data.job_name;
+          //   setJobs(updatedJobs);
+          // }
           setLoading(false);
         })
         .catch(error => {
@@ -51,18 +59,20 @@ const Leaderboard = () => {
     <div className="leaderboard-page">
       <h1>Job Selection</h1>
       
-      {/* Centered Hive Grid for Job Selection */}
+      {/* Hexagon Grid for Job Selection */}
       <div className="grid-container">
-        <div className="grid">
+        <div className="hex-grid">
           {jobs.map((job) => (
-            <div
+            <div 
               key={job.id}
-              className={`block ${selectedJobId === job.id ? "selected" : ""}`}
+              className={`hex-item ${selectedJobId === job.id ? "selected" : ""}`}
               onClick={() => setSelectedJobId(job.id)}
             >
-              <div className="job-info">
-                <div className="job-name">{job.name}</div>
-                <div className="job-id">ID: {job.id}</div>
+              <div className="hex-content">
+                <div className="job-info">
+                  <div className="job-name">{job.name}</div>
+                  <div className="job-id">ID: {job.id}</div>
+                </div>
               </div>
             </div>
           ))}
