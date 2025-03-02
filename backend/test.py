@@ -179,5 +179,3 @@ for l in extract_education(resume_text):
 
 
 resume_description = f"{name}, {email}, {phone}, {linkedin}, \nInstitutions: {institutions} \nEducation:{education} \nRelated Classes: {classes} \nSkills: {skills} \nExperience: {experience}"
-
-print(resume_description)
