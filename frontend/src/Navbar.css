@@ -1,0 +1,156 @@
+/* Navbar Styling */
+.navbar {
+    background-color: var(--bg-dark);
+    padding: 0.5rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* Logo Styling */
+  .logo-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--primary);
+  }
+  
+  .logo-image {
+    height: 40px;
+    width: auto;
+    margin-right: 10px;
+    transition: transform 0.3s ease;
+  }
+  
+  .logo-link:hover .logo-image {
+    transform: rotate(10deg);
+  }
+  
+  .logo-text {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .logo-text::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--primary);
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s ease;
+  }
+  
+  .logo-link:hover .logo-text::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+  }
+  
+  /* Navigation Links */
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+  
+  .nav-item {
+    color: var(--text-light);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 0;
+    position: relative;
+    transition: color 0.3s ease;
+  }
+  
+  .nav-item:hover, 
+  .nav-item.active {
+    color: var(--primary);
+  }
+  
+  .nav-item::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary);
+    transition: width 0.3s ease;
+  }
+  
+  .nav-item:hover::after,
+  .nav-item.active::after {
+    width: 100%;
+  }
+  
+  /* CTA Button */
+  .nav-cta {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 2px 8px rgba(229, 157, 31, 0.3);
+  }
+  
+  .nav-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(229, 157, 31, 0.4);
+    animation: hoverPulse 1.5s infinite;
+  }
+  
+  @keyframes hoverPulse {
+    0% { box-shadow: 0 0 0 0 rgba(246, 185, 59, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(246, 185, 59, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(246, 185, 59, 0); }
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .navbar-container {
+      flex-direction: column;
+      padding: 1rem;
+    }
+    
+    .logo-container {
+      margin-bottom: 1rem;
+    }
+    
+    .nav-links {
+      width: 100%;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .nav-cta {
+      margin-top: 0.5rem;
+      width: 100%;
+      text-align: center;
+    }
+  }

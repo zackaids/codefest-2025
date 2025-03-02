@@ -24,9 +24,9 @@ ALLOWED_EXTENSIONS = {"pdf"}
 # nltk.download("averaged_perceptron_tagger")
 
 
-genai.configure(api_key="your_beautiful_api_key")
+genai.configure(api_key="AIzaSyBLi3xUnco4sZsuoi0oPRLzDo0SKTNMPu8")
 
-uri = "mongodb+srv://<user>:<password>@cluster0.4inxm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+uri = "mongodb+srv://zack:9tzmM5v70eQUQd6W@cluster0.4inxm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 client = MongoClient(uri, server_api=ServerApi('1'))
 
 try:

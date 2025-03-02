@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Route, Routes, Link, useNavigate } from "react-router-dom"; 
+import { Route, Routes, useNavigate } from "react-router-dom"; 
 import axios from "axios";
 import "./App.css";
+import Navbar from "./Navbar.js"; // Import the new Navbar component
 import Leaderboard from "./Leaderboard";
 import CandidateAnalysis from "./CandidateAnalysis"; 
 import CandidateSummary from "./CandidateSummary";
@@ -81,39 +82,65 @@ function App() {
 
   return (
     <div className="App">
-      <nav className="navbar">
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/leaderboard">Leaderboard</Link>
-          </li>
-        </ul>
-      </nav>
+      {/* Use the new Navbar component instead of the inline navbar */}
+      <Navbar />
 
       <Routes>
         <Route
           path="/"
           element={
-            <>
-              <h1>HireHive</h1>
+            <div className="home-container">
+              <div className="hero-section">
+                <h1>Welcome to <span className="highlight">HireHive</span></h1>
+                <p className="tagline">Find your perfect candidate with our intelligent resume analysis</p>
+                <button className="cta-button" onClick={() => navigate('/evaluate')}>
+                  Evaluate a Candidate
+                </button>
+              </div>
+              
+              <div className="features-section">
+                <div className="feature-card">
+                  <div className="feature-icon">📋</div>
+                  <h3>Resume Analysis</h3>
+                  <p>Upload resumes and get instant AI-powered analysis</p>
+                </div>
+                <div className="feature-card">
+                  <div className="feature-icon">🏆</div>
+                  <h3>Candidate Ranking</h3>
+                  <p>Compare candidates and find the best fit for your position</p>
+                </div>
+                <div className="feature-card">
+                  <div className="feature-icon">💡</div>
+                  <h3>Skill Matching</h3>
+                  <p>Identify strengths and gaps in candidate experience</p>
+                </div>
+              </div>
+            </div>
+          }
+        />
+        <Route
+          path="/evaluate"
+          element={
+            <div className="evaluate-container">
+              <h1>Evaluate a Candidate</h1>
               <div className="input-container">
                 <h2>Job Details</h2>
-                <input
-                  type="text"
-                  placeholder="Job ID"
-                  value={jobId}
-                  onChange={onJobIdChange}
-                  className="job-id-input"
-                />
-                <input
-                  type="text"
-                  placeholder="Job Name"
-                  value={jobName}
-                  onChange={onJobNameChange}
-                  className="job-name-input"
-                />
+                <div className="job-detail-inputs">
+                  <input
+                    type="text"
+                    placeholder="Job ID"
+                    value={jobId}
+                    onChange={onJobIdChange}
+                    className="job-id-input"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Job Name"
+                    value={jobName}
+                    onChange={onJobNameChange}
+                    className="job-name-input"
+                  />
+                </div>
                 <h2>Job Description</h2>
                 <textarea
                   className="job-description-input"
@@ -131,16 +158,32 @@ function App() {
               </div>
               <div className="upload-container">
                 <h2>Upload Resume (PDF)</h2>
-                <input type="file" onChange={onFileChange} />
-                <button onClick={onFileUpload}>Upload and Evaluate</button>
+                <div className="file-upload-area">
+                  <input type="file" id="resume-file" onChange={onFileChange} />
+                  <label htmlFor="resume-file" className="file-label">
+                    {selectedFile ? selectedFile.name : "Choose a file"}
+                  </label>
+                </div>
+                <button className="upload-button" onClick={onFileUpload}>Upload and Evaluate</button>
               </div>
-            </>
+            </div>
           }
         />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/candidate-analysis" element={<CandidateAnalysis />} />
         <Route path="/candidate-summary/:id" element={<CandidateSummary />} />
       </Routes>
+
+      <footer className="footer">
+        <div className="footer-content">
+          <p>&copy; {new Date().getFullYear()} HireHive. All rights reserved.</p>
+          <div className="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Contact Us</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

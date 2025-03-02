@@ -4,76 +4,126 @@ import { Link } from "react-router-dom";
 import "./Leaderboard.css";
 
 const Leaderboard = () => {
-  const [jobIds, setJobIds] = useState([]); 
-  const [selectedJobId, setSelectedJobId] = useState(null); 
-  const [leaderboardData, setLeaderboardData] = useState([]); 
+  const [jobs, setJobs] = useState([]); // Jobs with id and name
+  const [selectedJobId, setSelectedJobId] = useState(null);
+  const [leaderboardData, setLeaderboardData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Fetch all job IDs when the component mounts
-  // need to change this ...!!!
+  // Fetch all jobs when the component mounts
   useEffect(() => {
+    setLoading(true);
     axios.get("http://localhost:5000/api/jobs")
       .then(response => {
-        setJobIds(response.data.job_ids);
+        setJobs(response.data.job_ids.map(id => ({ id, name: `Job ${id}` })));
+        setLoading(false);
       })
       .catch(error => {
-        console.error("Error fetching job IDs:", error);
+        console.error("Error fetching jobs:", error);
+        setLoading(false);
       });
   }, []);
 
   // Fetch leaderboard data when a job ID is selected
   useEffect(() => {
     if (selectedJobId) {
+      setLoading(true);
       axios.get(`http://localhost:5000/api/leaderboard/${selectedJobId}`)
         .then(response => {
           setLeaderboardData(response.data.candidates);
+          setLoading(false);
         })
         .catch(error => {
           console.error("Error fetching leaderboard data:", error);
+          setLoading(false);
         });
     }
   }, [selectedJobId]);
 
+  // Helper function to determine candidate status based on score
+  const getCandidateStatus = (score) => {
+    if (score >= 80) return "excellent";
+    if (score >= 60) return "good";
+    if (score >= 40) return "average";
+    return "poor";
+  };
+
   return (
     <div className="leaderboard-page">
-      <div className="job-hex-grid">
-        {jobIds.map((jobId, index) => (
-          <div
-            key={index}
-            className="hex-button"
-            onClick={() => setSelectedJobId(jobId)}
-          >
-            {jobId}
-          </div>
-        ))}
+      <h1>Job Selection</h1>
+      
+      {/* Centered Hive Grid for Job Selection */}
+      <div className="grid-container">
+        <div className="grid">
+          {jobs.map((job) => (
+            <div
+              key={job.id}
+              className={`block ${selectedJobId === job.id ? "selected" : ""}`}
+              onClick={() => setSelectedJobId(job.id)}
+            >
+              <div className="job-info">
+                <div className="job-name">{job.name}</div>
+                <div className="job-id">ID: {job.id}</div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
+      {/* Leaderboard Display */}
       {selectedJobId && (
         <div className="leaderboard-container">
           <div className="leaderboard">
-            <h2>Leaderboard for Job ID: {selectedJobId}</h2>
-            <table>
-              <thead>
-                <tr>
-                  <th>Rank</th>
-                  <th>Candidate</th>
-                  <th>Score</th>
-                </tr>
-              </thead>
-              <tbody>
-                {leaderboardData.map((candidate, index) => (
-                  <tr key={index} data-score={candidate.score}>
-                    <td>{index + 1}</td>
-                    <td>
-                      <Link to={`/candidate-summary/${candidate._id}`}>
-                        {candidate.candidate_name || "Unknown Candidate"}
-                      </Link>
-                    </td>
-                    <td>{candidate.score}</td>
+            <h2>Candidates for {jobs.find(job => job.id === selectedJobId)?.name || `Job ${selectedJobId}`}</h2>
+            
+            {loading ? (
+              <div className="loading">Loading leaderboard data...</div>
+            ) : leaderboardData.length > 0 ? (
+              <table>
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>Candidate</th>
+                    <th>Score</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {leaderboardData.map((candidate, index) => (
+                    <tr 
+                      key={index} 
+                      className={getCandidateStatus(candidate.score)}
+                    >
+                      <td>{index + 1}</td>
+                      <td>{candidate.candidate_name || "Unknown Candidate"}</td>
+                      <td>{candidate.score}</td>
+                      <td>
+                        <span className="status-badge">
+                          {getCandidateStatus(candidate.score)}
+                        </span>
+                      </td>
+                      <td>
+                        <Link 
+                          to={`/candidate-summary/${candidate._id}`}
+                          className="details-btn"
+                        >
+                          Details
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <div className="no-data">No candidates found for this job.</div>
+            )}
           </div>
+        </div>
+      )}
+
+      {!selectedJobId && (
+        <div className="instructions">
+          <p>Please select a job from the honeycomb grid above to view its leaderboard.</p>
         </div>
       )}
     </div>
