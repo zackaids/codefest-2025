@@ -1,0 +1,98 @@
+
+.job-hex-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  
+.hex-button {
+width: 100px;
+height: 55px;
+background-color: #FFD700; 
+clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+color: #000; 
+font-weight: bold;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+transition: background-color 0.3s ease;
+}
+
+.hex-button:hover {
+background-color: #FFC300; 
+}
+
+.leaderboard-container {
+position: relative;
+margin: 20px auto;
+max-width: 800px;
+}
+
+.leaderboard {
+background-color: #fff;
+padding: 20px;
+border-radius: 10px;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+position: relative;
+}
+
+
+.leaderboard::before,
+.leaderboard::after {
+content: '';
+position: absolute;
+width: 20px;
+height: 20px;
+background-color: #fff;
+clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.leaderboard::before {
+top: -10px;
+left: 50%;
+transform: translateX(-50%) rotate(180deg);
+}
+
+.leaderboard::after {
+bottom: -10px;
+left: 50%;
+transform: translateX(-50%);
+}
+
+.leaderboard table {
+width: 100%;
+border-collapse: collapse;
+}
+
+.leaderboard th, .leaderboard td {
+padding: 10px;
+text-align: left;
+}
+
+.leaderboard th {
+background-color: #FFD700;
+color: #000;
+}
+
+.leaderboard tbody tr {
+transition: background-color 0.3s ease;
+}
+
+.leaderboard tbody tr:hover {
+background-color: rgba(255, 215, 0, 0.1);
+}
+
+.leaderboard tbody tr[data-score="100"] {
+background-color: rgba(0, 255, 0, 0.1); 
+}
+
+.leaderboard tbody tr[data-score="50"] {
+background-color: rgba(255, 255, 0, 0.1);
+}
+
+.leaderboard tbody tr[data-score="0"] {
+background-color: rgba(255, 0, 0, 0.1); 
+}
