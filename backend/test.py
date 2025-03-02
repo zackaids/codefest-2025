@@ -70,6 +70,10 @@ def extract_linked_in(text):
     linked_in_links = linked_in_pattern.findall(text)
     return linked_in_links if linked_in_links else ["No LinkedIn profile found"]
 
+    
+def extract_education(text):
+    education = []    
+
     # Use regex pattern to find education information
     pattern = r"(?i)(?:(?:Bachelor|B\.S\.|B\.A\.|Master|M\.S\.|M\.A\.|Ph\.D\.)\s(?:[A-Za-z]+\s)*[A-Za-z]+)"
     matches = re.findall(pattern, text)
@@ -99,7 +103,7 @@ def extract_classes(text, classes_list):
 
 
 
-pdf_path = "C:/Users/Maksym/Documents/Github/codefest-2025/backend/example_resume.pdf"
+pdf_path = "C:/Users/Maksym/Documents/Github/codefest-2025/backend/example_resume1.pdf"
 resume_text = extract_text_from_pdf(pdf_path)
 print(resume_text)
 shortened_text_5 = top_of_text(resume_text, 5)
@@ -154,6 +158,7 @@ institutions = ""
 classes = ""
 experience = ""
 skills = ""
+education = ""
 
 # print(f"\n\nName: {name}\nEmail: {email}\nPhone: {phone}\nLinkedIn: {linkedin}")
 # print(f"Skills: {skills}")
@@ -169,6 +174,8 @@ for j in extract_experience(resume_text):
     experience += j + " | "
 for k in extract_skills(resume_text, skills_list):
     skills += k + " | "
+for l in extract_education(resume_text):
+    education += l + " | "
 
 
-resume_description = f"{name}, {email}, {phone}, {linkedin}, \nInstitutions: {institutions} \nRelated Classes: {classes} \nSkills: {skills} \nExperience: {experience}"
+resume_description = f"{name}, {email}, {phone}, {linkedin}, \nInstitutions: {institutions} \nEducation:{education} \nRelated Classes: {classes} \nSkills: {skills} \nExperience: {experience}"
