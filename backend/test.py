@@ -40,7 +40,7 @@ def extract_experience(text):
     tokens = word_tokenize(text)
     tagged = pos_tag(tokens)
 
-    skills = [word for word, pos in tagged if pos in ["NN", "NNS", "NNP", "NNPS"]]
+    skills = [word for word, pos in tagged if pos in ["VB", "JJR", "JJS", "VBD", "VBN"]]
     return list(set(skills))
 
 def top_of_text(text, n):
@@ -69,9 +69,6 @@ def extract_linked_in(text):
     linked_in_pattern = re.compile(r'linkedin\.com/in/[A-Za-z0-9_-]+')
     linked_in_links = linked_in_pattern.findall(text)
     return linked_in_links if linked_in_links else ["No LinkedIn profile found"]
-
-def extract_education(text):
-    education = []
 
     # Use regex pattern to find education information
     pattern = r"(?i)(?:(?:Bachelor|B\.S\.|B\.A\.|Master|M\.S\.|M\.A\.|Ph\.D\.)\s(?:[A-Za-z]+\s)*[A-Za-z]+)"
@@ -153,14 +150,25 @@ name = extract_names(shortened_text_5)[0][0] + " " + extract_names(shortened_tex
 email = extract_emails(shortened_text_5)[0]
 phone = extract_phone_numbers(shortened_text_5)[0]
 linkedin = extract_linked_in(shortened_text_5)[0]
-education = extract_education(resume_text)
+institutions = ""
+classes = ""
+experience = ""
+skills = ""
 
-skills = extract_skills(resume_text, skill_req)
+# print(f"\n\nName: {name}\nEmail: {email}\nPhone: {phone}\nLinkedIn: {linkedin}")
+# print(f"Skills: {skills}")
+# print(f"Classes: {extract_classes(resume_text, classes_list)}")
+# print(f"Institutions: {institutions}")
+# print(f"Experience: {extract_experience(resume_text)}")
 
-print(f"\n\nName: {name}\nEmail: {email}\nPhone: {phone}\nLinkedIn: {linkedin}")
-print(f"Skills: {skills}")
-print(f"Education: {education}")
-print(f"Classes: {extract_classes(resume_text, classes_list)}")
-print(f"College: {extract_college_name(resume_text)}")
-print(f"Experience: {extract_experience(resume_text)}")
+for i in extract_college_name(resume_text):
+    institutions += i + " | "
+for j in extract_classes(resume_text, classes_list):
+    classes += j + " | "
+for j in extract_experience(resume_text):
+    experience += j + " | "
+for k in extract_skills(resume_text, skills_list):
+    skills += k + " | "
 
+
+resume_description = f"{name}, {email}, {phone}, {linkedin}, \nInstitutions: {institutions} \nRelated Classes: {classes} \nSkills: {skills} \nExperience: {experience}"
